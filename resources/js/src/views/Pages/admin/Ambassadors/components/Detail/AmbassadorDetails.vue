@@ -1,0 +1,138 @@
+<template>
+    <section id="configuration" class="search view-cause">
+         <div class="notification-section shadow p-5 rounded-15 my-4">
+        
+        <div class="row">
+            <div class="col-md-12 pt-5 table-responsive">
+                  <Table @page-changed="fetch" :fields="tableFields" :data="ambassador_business_user">
+                    <table-search 
+                        show-date-ranges
+                        @on-search="setCallback('search',$event,fetch)"
+                        @on-change-entries="setCallback('entries',$event,fetch)"
+                        @on-change-status="setCallback('currentStatus',$event,fetch)"
+                        @on-change-date-from="setCallback('dateFrom',$event,fetch)"
+                        @on-change-date-to="setCallback('dateTill',$event,fetch)"
+                    />
+                     
+                </Table>
+            </div>
+        </div>
+    </div>
+    </section>
+</template>
+
+
+<script>
+import { mapActions, mapState } from 'vuex';
+export default {
+    computed: {
+        tableFields(){
+                return [
+                    {
+                        label : 'Business Name',
+                        key : 'business_name',
+
+                    },
+                    {
+                        label : 'Category',
+                        key : 'category_name',
+                        
+                    },
+                    {
+                        label : 'Recieved On',
+                        key : 'created_at',
+                        format : this.formatDate,
+                        
+                    },
+                ]
+        },
+    },
+    components: {
+    },
+    data() {
+        return {
+            ambassador_business_user : {},
+            currentStatus: '',
+            dateFrom: '',
+            dateTill: '',
+            fromDateCheck: false,
+            tillDateCheck: false,
+            type : '',
+            entries : 10,
+            search : null,
+        };
+    },
+    created() {
+        let { page } = this.$route.query;
+        this.fetch(page);
+    },
+    watch: {
+        search: function(val, oldVal) {
+            this.fetch();
+        },
+        entries: function(val, oldVal) {
+            this.fetch();
+        },
+        dateTill(val, oldVal){
+            if(val.length > 0){
+                this.tillDateCheck = true;
+                if(this.fromDateCheck){
+                    this.fetch();
+                }
+            }else{
+                this.tillDateCheck = false;
+            }
+        },
+        dateFrom(val, oldVal){
+            if(val.length > 0){
+                this.fromDateCheck = true;
+                if(this.tillDateCheck){
+                    this.fetch();
+                }
+            }else{
+                this.fromDateCheck = false;
+            }
+        }
+    },
+    methods: {
+        ...mapActions('admin', ['getAll']),
+        async fetch(page = 1) {
+            let id = this.$route.params.id;
+            let params = {
+                route: route('admin.ambassador.edit' ,{id}),
+                // mutation: 'SET_USERS',
+                // variable: 'users',
+                data: {
+                    page,
+                    status: this.currentStatus,
+                    search : this.search,
+                    entries : this.entries,
+                    dateFrom: this.dateFrom,
+                    dateTill: this.dateTill,
+                  
+                }
+            };
+            let { data } = await this.getAll(params);
+            this.ambassador_business_user = data.ambassador_business_user;
+        
+            /* if (page != 1) {
+                this.addRouteQuery({ page });
+            } else {
+
+                this.addRouteQuery({});
+            } */
+        },
+        fetchFilteredData(e){
+            this.currentStatus = e.target.value;
+            this.fetch();
+        },
+
+        clearCalandar(){
+            this.dateFrom = '';
+            this.dateTill = '';
+            this.fetch();
+        }
+    }
+}
+
+</script>

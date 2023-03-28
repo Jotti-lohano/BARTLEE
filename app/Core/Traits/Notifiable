@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Support\Facades\Http;
+
+trait Notifiable{
+
+	public function sendPush($data = [],$tokens = []){
+		
+		$fields = [
+            'priority' => 'high',
+            'content_available' => true,
+            'registeration_ids' => $tokens/*'e63mhMkvSqmcmLD3tdNQUg:APA91bEr4r2byHJpwxy2G3IzGqsiv3W83kA9rE9_MHgQk9qidRdb_XFhkdZtkIS1vdNhXtJdo0RBL6PWKCBLlfAg7mk-8HxusZb8g3PCguTQ03cy595GLjiHvQoPy32WRixroCDMqTM6'*/,
+        ];
+        $fields = array_merge($fields,$data);
+        $response = Http::withHeaders([
+            'Authorization' => 'key=AAAAbx1Vhx8:APA91bFBI5auFVhkfQEDO4rgSJcBuX2qa7NGN8DozPoes-KAhU7G58Fuq81ZSu4wkceBb4QB0yc5QQIW6ODiCfFxHjneToRz7gyibPOV0A3z-zJIaJ3ZaX51Z4RKIWjxP3N8QsLQ2XdQ',
+            'Content-Type' => 'application/json',
+        ])->post('https://fcm.googleapis.com/fcm/send',$fields);
+
+	}
+}
+?>

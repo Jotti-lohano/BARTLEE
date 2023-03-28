@@ -1,0 +1,153 @@
+/*******************
+	Form Elements  Start 
+***********************************/
+
+
+/***** Place Holder *****/
+::-webkit-input-placeholder { color:inherit !important; }
+:-moz-placeholder { color: inherit !important;}
+.form-control::-moz-placeholder { color: inherit !important; opacity: 0.5; }
+:-ms-input-placeholder { color: inherit !important; }
+form .form-control::placeholder,
+.form-control::placeholder { color: inherit !important; opacity: 0.5; }
+
+
+
+/***** Custom Check Box *****/
+.checkbox {display: block;position: relative;padding: 1px 0 0 35px;margin-bottom: 0;margin-top: 3px;cursor: pointer;;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;color: #999999; font-weight: 400; font-family:'Poppins', sans-serif;  }
+.checkbox label{ color: #999999 !important; padding-left: 0px !important; font-weight: 500 !important;;}
+.checkbox input {position: absolute;opacity: 0;cursor: pointer;height: 0;width: 0 !important;}
+.checkbox .checkmark {position: absolute;top: 4px;left: 0px;height: 18px;width: 18px;border: 1px solid #ffffff;border-radius: 5px; background-color: #ffffff; border: 1px solid #999999; box-shadow: 0px 0px 10px rgb(0 0 0 / 10%); }
+.checkbox input:checked ~ .checkmark {}
+.checkbox .checkmark:after {content: "";position: absolute;display: none;}
+.checkbox input:checked ~ .checkmark:after {display: block;}
+.checkbox .checkmark:after {left: 0px;top: 2px;width: 5px;height: 10px;border: solid #FF0000;border-width: 0 2px 2px 0;-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);right: 0;margin: 0 auto;}
+
+
+/***** Input Field *****/
+form label { font-size: 16px; color: #242424; font-weight: 500; padding-left: 20px; }
+
+form .form-control,
+.form-control,
+textarea,
+select {font-size:16px;  background: #ffffff; border:1px solid #E8E8E8; color: #000000; font-weight: 400; transition: all 0.6s ease 0s; padding: 15px 30px; line-height:1.5; border-radius: 50px; width:100%; outline:none;  box-shadow:0px 0px 5px rgba(0,0,0,0.05); height: auto; }
+
+.form-control:focus,
+textarea:focus{ outline-offset: -2px; -webkit-appearance: none; box-shadow: 0px 0px 10px rgb(0 0 0 / 10%); outline: none; border: 1px solid #ffffff; color: #999999; }
+
+textarea.form-control { height: auto; resize: none; border-radius: 20px; }
+
+select,
+select.form-control { font-size: 18px; font-weight: 400;  border: 1px solid transparent; -webkit-appearance:none; appearance:none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-color: transparent; padding: 0 30px 0 30px;color: #999999; transition: all 0.6s ease 0s; height: 55px !important;}
+select option{ color: #000000;}
+select.form-control:focus,
+select:focus{ background-color: transparent; border-color: #fff; color: #fff;}
+
+.form-control:disabled, .form-control[readonly] {opacity: 1;background: transparent; border: transparent ; color:#000000; box-shadow: none;}
+
+.position-relative .form-control { padding-right: calc(50px + 0px); }
+
+
+/***** Buttons*****/	
+.btn {  color: #fff; cursor: pointer; padding: 13px 40px; font-size: 15px; font-weight: 500; transition: all 0.6s ease 0s; text-transform: capitalize; line-height: normal; border-radius: 50px;text-align:center; display:inline-block;  border:1px solid transparent;  }
+.btn:focus,
+.btn:hover { outline: none; text-decoration:none; box-shadow: none; }
+
+.btn-primary { color: #ffffff; background: #163459; border-color:#163459;  }
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary.active { background-color: #212121; color: #ffffff;  border-color: #212121; }
+
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active{ color: #ffffff; background-color: #212121;  border-color: #212121; outline: none; box-shadow: none;}
+
+
+.btn-outline-primary { color: #333333; background: transparent; border-color:#333333;  }
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary.focus,
+.btn-outline-primary.active { background-color: #333333; color: #ffffff;  border-color: #333333; }
+
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active{ color: #ffffff; background-color: #333333;  border-color: #333333; outline: none; box-shadow: none;}
+
+
+.btn-secondary {color: #fff; background: #04D4B4; border-color: #04D4B4; }
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary.focus,
+.btn-secondary.active{ background-color: transparent; color: #04D4B4; border-color: #04D4B4; }
+
+.btn-secondary:not(:disabled):not(.disabled):active:focus,
+.btn-secondary:not(:disabled):not(.disabled).active,
+.btn-secondary:not(:disabled):not(.disabled):active { color: #04D4B4; background-color: transparent;  border-color: #04D4B4; outline: none; box-shadow: none; }
+
+
+.btn-blue{ color: #ffff; background: #28A6E1; border-color:#28A6E1; }
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue.focus { color: #fff; background-color: #28A6E1; border-color: #28A6E1; }
+.btn-blue:not(:disabled):not(.disabled):active:focus,
+.btn-blue:not(:disabled):not(.disabled).active,
+.btn-blue:not(:disabled):not(.disabled):active{ color: #fff; background-color: #28A6E1; border-color: #28A6E1; }
+
+.btn-dark{ color: #ffff; background: #3B3B3B; border-color:#3B3B3B; }
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark.focus { color: #fff; background-color: #DB4423; border-color: #DB4423; }
+.btn-dark:not(:disabled):not(.disabled):active:focus,
+.btn-dark:not(:disabled):not(.disabled).active,
+.btn-dark:not(:disabled):not(.disabled):active{ color: #fff; background-color: #DB4423; border-color: #DB4423; }
+
+
+
+.btn.btn-sm{ padding-left:30px; padding-right:30px; }
+
+.inline-link{ color: #333333; font-weight: 500; font-weight: 18px; text-decoration: underline;}
+.inline-link i{ margin-right:10px;}
+.inline-link:hover{ color: #04D4B4;}
+
+/***** Password Vissible Button *****/
+form button.view-btn i {position: initial;transition: .3s ease-in-out;color: #DBDBDB; font-size: 16px; margin-bottom: 0px;}
+form button.view-btn:focus {background: transparent !important;}
+form button.view-btn {border: 0; background: transparent; padding: 0; top: 50%; right: 20px; /*margin-top: -8px;*/ transform: translateY(-50%);   outline:none; line-height: 1;}
+form button.view-btn:hover i {color: #b3b3b3;}
+
+
+/***** Search Field With (font Owesome) Icon *****/
+.search-input{ position:relative; }
+.search-input label{ position: relative;}
+.search-input label:after { font-family: "Font Awesome 5 Free"; content: '\f002'; position: absolute; font-size: 15px; color: #000; width: 20px; height: 30px;bottom: 0; display: inline-flex; align-items: center; font-weight: 900; top: 8px; left: 20px; }
+.search-input input[type="search"] { padding: 0 20px 0 45px; transition: all 0.6s ease 0s;  }
+.search-input input[type="search"]:focus{ border-color:#000;}
+
+
+/***** Select Input With (Image) Arrow *****/
+.select-input{ display:inline-block; }
+.select-input select{ color: #999999;width: 137px;padding: 0 15px;font-size: 14px;font-weight: 500; background-image: url(../../images/arrow-select.png); background-repeat:no-repeat; background-position: 92% 17px;margin: 0;box-shadow: 0 0 10px 0 rgb(0,0,0,.1);height: 40px; border-radius:50px; -moz-appearance: none;  -webkit-appearance: none; border:none; }
+
+
+/*****  Select Box With ( font Owesome )  Arrow *****/
+.select-wrapper { position: relative; display: inline-block;  }
+.select-wrapper select.form-control{ -moz-appearance: none;  -webkit-appearance: none; border:none;}
+.select-wrapper:after {font-family: "Font Awesome 5 Free";content: '\f078'; font-size: 14px; color:#333333; width: 10px; height: 10px; display: inline-flex; align-items: center; font-weight: 900; position: absolute; right: 16px; top: 50%; margin-top:-3px; pointer-events: none; 
+/* border-left: 5px solid transparent; border-right: 5px solid transparent;  border-top: 6px solid #666;*/ }
+
+
+/***** Custom Radio Button *****/
+.radio { margin:15px 0; }
+.radio label{ margin-bottom:0px; font-size:15px; color:#999999; font-weight:500; line-height:1.1; }
+.radio input[type="radio"] { position: absolute; opacity: 0; }
+.radio input[type="radio"] + .radio-label:before { font-size:14px; content: ''; background: #f4f4f4; border-radius: 100%; border: 1px solid #b4b4b4;  display: inline-block;  width: 1.4em; height: 1.4em;  position: relative;  top: -0.2em;  margin-right: 1em;  vertical-align: middle;  cursor: pointer;  text-align: center;  -webkit-transition: all 250ms ease;  transition: all 250ms ease; }
+.radio input[type="radio"]:checked + .radio-label:before { background-color: #000000; box-shadow: inset 0 0 0 4px #f4f4f4; }
+.radio input[type="radio"]:focus + .radio-label:before { outline: none;  border-color: #000000; }
+.radio input[type="radio"]:disabled + .radio-label:before { box-shadow: inset 0 0 0 4px #f4f4f4; border-color: #b4b4b4;  background: #b4b4b4; }
+.radio input[type="radio"] + .radio-label:empty:before {  margin-right: 0;}
+
+
+/*******************
+	Form Elements  End
+***********************************/

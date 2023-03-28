@@ -1,0 +1,67 @@
+/*******************
+	General Calsses Start  
+***********************************/
+
+.mx-n2{ margin-right: -0.5rem !important;  margin-left: -0.5rem !important; }
+
+.shadow-sm { box-shadow: 0 10px 40px 0 rgb(165 165 165 / 8%), 0 2px 9px 0 rgb(6 6 6 / 15%)  !important; }
+
+
+a { outline: none !important;  text-decoration: none; }
+
+.mt-6 { margin-top: 4rem !important; }
+.mt-7 { margin-top: 5rem !important; }
+.mt-8 { margin-top: 6rem !important; }
+
+.mb-6 {margin-bottom: 4rem !important; }
+.mb-7 { margin-bottom: 5rem !important; }
+.mb-8 { margin-bottom: 6rem !important; }
+
+.p-lg-6{padding: 4rem;}
+
+
+.text-purple{ color:#AC57EC; }
+.text-yellow{ color:#FFB300; }
+.text-green{ color:#51CC1D}
+.text-danger {color: #FF1625 !important;}
+.text-seegreen {color: #04D4B4 !important;}
+.text-gray{ color:  #666666 !important;}
+
+.w-auto{ width: auto !important;}
+.border{ border-color: #E2E2E2 !important;}
+
+/* .rounded {border-radius: 10px !important;}
+.rounded {border-radius:49px !important;} */
+
+.rounded-10 {border-radius: 10px;}
+.rounded-20 {border-radius: 20px;}
+.rounded-30 {border-radius: 30px;}
+
+.bg-light { background: #F9F9F9 !important; }
+.bg-light2{ background:#EEEEEE;}
+
+.h-150{ height:150px;}
+.height-500 { height: 500px !important; }
+.height-390 { height: 390px !important; }
+.height-450 { height: 450px !important; }
+
+.z-inxed-1{ z-index: 1;}
+
+.fw-light{ font-weight: 300 !important;}
+.fw-regular{ font-weight: 400 !important;}
+.fw-medium{ font-weight: 500 !important;}
+.fw-semibold{ font-weight: 600 !important;}
+.fw-bold{ font-weight: 700 !important;}
+
+
+
+.shadow-none{ box-shadow: none !important;}
+.border{ border-color: #E2E2E2 !important;}
+.border-top{ border-top: 1px solid #E2E2E2 !important; }
+.border-bottom{ border-bottom: 1px solid #E2E2E2 !important; }
+
+
+.fs-16{ font-size: 16px !important;}
+/*******************
+	General Calsses End   
+***********************************/

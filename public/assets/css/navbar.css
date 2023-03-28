@@ -1,0 +1,100 @@
+/******
+Left Menu (Dark Theme)
+*****/
+
+/* .main-menu ul.navigation-main {margin-top: 20px;} */
+
+
+
+ul.nav.navbar-nav.nav-right {margin: 12px 0 0 0;}
+.navbar-light .navbar-nav .nav-link {color: #999999 !important;}
+.navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {color: #999999;}
+
+
+.nav .dropdown-divider {margin: 0;}
+
+body.vertical-layout.vertical-menu .navbar .navbar-brand img {width:100%; max-width: 55px;}
+body.vertical-layout.vertical-menu.menu-collapsed .main-menu .navigation > li > a {
+    padding: 15px 0px 15px 14px;
+}
+
+
+.navigation {}
+
+.main-menu .main-menu-content{ padding-bottom: 50px;}
+
+.main-menu.menu-light {color: #fff ;background: #001621;border-right: 0px solid #001621;}
+.main-menu.menu-light .navigation {background: transparent;  padding-top: 15px; }
+.main-menu {background-image: url(../../images/nav-bg.png) !important; background-repeat: no-repeat !important; background-size: contain !important;   background-position: left bottom 20px !important; }
+
+.main-menu.menu-light .navigation > li.hover > a,
+.main-menu.menu-light .navigation > li:hover > a,
+.main-menu.menu-light .navigation > li.active > a {
+	border-left: 6px solid #28A6E1;text-align: start;background-color: #28A6E1;color: #fff; font-weight:500; }
+
+.main-menu.menu-light .navigation > li:hover > a > i path,
+.main-menu.menu-light .navigation > li.active > a >i path { fill: #fff; }
+
+.main-menu.menu-light .navigation li a { border-top-right-radius: 0px; border-bottom-right-radius: 0px; color: white;font-size:14px;font-weight:500; line-height: 18px;padding: 20px 0px 20px 10px;text-transform: capitalize; position: relative; border-left-width: 6px;}
+
+.main-menu.menu-light .navigation li a .menu-title{ vertical-align: middle;}
+
+/* .main-menu.menu-light .navigation li a .menu-title{ vertical-align: middle;} */
+
+/* body.vertical-layout.vertical-menu.menu-collapsed .main-menu .navigation > li > a {padding: 20px 0px 20px 14px;} */
+
+body.vertical-layout.vertical-menu.menu-collapsed .main-menu .main-menu-content > span.menu-title,
+body.vertical-layout.vertical-menu.menu-collapsed .main-menu .main-menu-content a.menu-title {padding: 14px 15px 14px 15px; margin: 0 0 0 0; font-size: 14px;  background: #28A6E1 !important; text-transform: capitalize; }    
+
+.main-menu.menu-light .navigation > li > a i {position: relative;top: 0px;}
+.main-menu.menu-light .navigation > li {padding: 0;border-left: 0px; padding-right: 0px;}
+.main-menu.menu-light .navigation > li > ul {background: #0056A7; padding: 10px 0;}
+.main-menu.menu-light .navigation > li ul li {background: #0056A7 !important;}
+.main-menu.menu-light .navigation > li ul li > a { padding: 15px 18px 15px 40px; color: #DCDCDC !important; font-weight: 400; }
+.main-menu.menu-light .navigation > li.open > a {background: #28A6E1; color:#fff;}
+.main-menu.menu-light .navigation > li.open {border: 0px;} 
+.main-menu.menu-light .navigation > li.open .hover > a ,.main-menu.menu-light .navigation .menu-content li.active > a{background: transparent;color: #fff;}
+.main-menu.menu-light .navigation > li.has-sub.hover > a,.main-menu.menu-light .navigation > li.has-sub.open> a {background: #212121;}
+.main-menu.menu-light .navigation > li > ul li a:hover{ color:#ffffff; text-decoration: underline;}
+.main-menu.menu-light .navigation > li > a > i path { fill: #fff; }
+
+.main-menu.menu-light .navigation > li.open .hover > a{ font-weight: 400; color: #fff !important; }
+.main-menu.menu-light .navigation .menu-content li.active > a{ font-weight: 500; color: #fff !important;}
+
+
+body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation > li > a > i { margin-right: 10px; width: 23px; vertical-align:middle; }
+
+
+
+body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation li.active > a::after {font-family: "Font Awesome 5 Free";font-weight: 900;content: "\f105";display: inline-block;position: absolute;right: 5px;top: 19px;width: 20px;transform: rotate(0deg);font-size: 18px;transition: -webkit-transform 0.2s ease-in-out;height: 20px; transition: all 0.3s ease-out;}
+body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation li.open > a:not(.mm-next):after{ transform: rotate(0deg);}
+
+
+
+/* body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation li.has-sub > a:not(.mm-next):after,
+.vertical-overlay-menu .main-menu .navigation li.has-sub > a:not(.mm-next):after,
+.vertical-overlay-menu.menu-hide .main-menu .navigation li.has-sub > a:not(.mm-next):after {font-family: "Font Awesome 5 Free";font-weight: 900;content: "\f105";display: inline-block;position: absolute;right: 11px;top: 19px;width: 20px;transform: rotate(0deg);font-size: 18px;transition: -webkit-transform 0.2s ease-in-out;height: 20px; transition: all 0.3s ease-out;} */
+
+/* body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation li.open > a:not(.mm-next):after,
+.vertical-overlay-menu .main-menu .navigation li.open > a:not(.mm-next):after,
+.vertical-overlay-menu.menu-hide .main-menu .navigation li.open > a:not(.mm-next):after{ content: "\f107"; top: 19px;} */
+
+
+ul.nav.navbar-nav.flex-row {margin: 0 0 0 0;text-align: center;display: block;background: #ffffff;padding: 0 0 0 0; border-radius: 0px;}
+.header-navbar .navbar-header {padding: 0;height: 7rem;background: #ffffff;width: 240px !important;}
+.header-navbar {padding: 0px;min-height: 7rem;font-family: 'Poppins', sans-serif !important;transition: 300ms ease all; box-shadow: 0 0 20px 6px rgb(66 66 66 / 11%), 0 2px 9px 0 rgb(123 123 123 / 9%);}
+.header-navbar .navbar-header .navbar-brand {padding: 0px 0px;}
+
+body.vertical-layout.vertical-menu.menu-collapsed .navbar .navbar-brand {padding: 0px; }
+body.vertical-layout.vertical-menu .navbar .navbar-brand {white-space: nowrap;margin: 25px 0px 0 0; display: inline-block;}
+.main-menu.menu-fixed {position: fixed;top: 7rem;height: calc(100% - 4rem);}
+html body .content .content-wrapper {padding: 11rem 1.8rem 1.8rem 1.8rem;}
+.navbar-light{background: #ffffff;border: 0px !important;}
+
+/*
+body.vertical-layout.vertical-menu.menu-expanded .main-menu .navigation li.open > a:not(.mm-next):after ,.vertical-overlay-menu .main-menu .navigation li.open > a:not(.mm-next):after, .vertical-overlay-menu.menu-hide .main-menu .navigation li.open > a:not(.mm-next):after{top: 19px;}
+*/
+
+@media (max-width: 991px) {
+	.main-menu.menu-light .navigation{ padding-top: 0;}
+}

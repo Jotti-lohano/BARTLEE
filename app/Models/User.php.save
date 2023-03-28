@@ -1,0 +1,238 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $guarded = [];
+
+    protected $fillable = ['username','email','password','business_type_id','country_id','category_id','phone','user_type','city_id', 'bio', 'avatar', 'name'];
+    protected $appends = ['smiles_balance','avatar_url'];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function getUsernameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    protected static function boot(){
+        parent::boot();
+        self::created(function(User $user){
+		if($user->user_type == 'business') {
+	                $user->business_user()->create([
+	                    'business_id' => $user->id,
+	                ]);
+            	}
+	});
+    } 
+
+    public function user_events()
+    {
+        return $this->hasMany(UserEvent::class,'user_id');
+    }
+
+    public function business_events()
+    {
+        return $this->hasMany(Event::class,'business_id');
+    }
+
+    public function user_challenges()
+    {
+        return $this->hasMany(UserChallenge::class,'user_id');
+    }
+
+    public function user_offers()
+    {
+        return $this->hasMany(UserOffer::class,'user_id');
+    }
+
+    public function offers()
+    {
+        return $this->hasManyThrough(Offer::class, UserBusiness::class, 'business_id', 'id', 'id', 'business_id');
+    }
+
+
+
+    public function badges()
+    {
+        return $this->hasMany(Badge::class);
+    }
+
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'leader_id', 'follower_id')->withTimestamps();
+    }
+
+    public function  IFollow($user_id) {
+        return Follower::where('leader_id', $user_id)->where('follower_id', auth('api')->user()->id)->exists();
+    }
+
+    public function isFollowMe($user_id) {
+        return Follower::where('follower_id', $user_id)->where('leader_id', auth('api')->user()->id)->exists();
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'leader_id')->withTimestamps();
+    }
+
+    public function user_badges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    public function user_groups()
+    {
+        return $this->hasMany(UserGroup::class);
+    }
+
+    public function did_you_knows()
+    {
+        return $this->hasMany(DidYouKnow::class,'business_id');
+    }
+
+    public function user_did_you_knows()
+    {
+        return $this->hasMany(UserDidYouKnow::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->wherePivot('accepted', '=', 1);
+        // if you want to rely on accepted field, then add this:
+        //->wherePivot('accepted', '=', 1);
+    }
+
+    public function friend_requests()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->wherePivot('accepted', '=', 0);
+    }
+
+    public function user_stickers()
+    {
+        return $this->hasMany(UserSticker::class, 'user_id');
+    }
+
+    public function business_user()
+    {
+        return $this->hasOne(UserBusiness::class,'business_id');
+    }
+
+
+    public function user_business_types()
+    {
+        return $this->hasMany(UserBusinessType::class);
+    }
+
+    public function business_type()
+    {
+        return $this->belongsTo(BusinessType::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    /*public function business_type_data()
+    {
+        return $this->belongsTo(BusinessType::class, 'business_type_id');
+    }*/
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id','id')->with('orderDetails');
+    }
+
+    public function business_tags()
+    {
+        return $this->hasMany(UserTag::class)->where('user_type','business');
+    }
+    public function smiles() {
+
+		return $this->hasMany(UserSmile::class, 'user_id');
+	}
+    public function chargeSmiles($smiles, $type = 'in', $columns = []) {
+
+		$columns = $columns + [
+			'value' => $smiles,
+			'type'   => $type,
+		];
+		return $this->smiles()->create($columns);
+	}
+
+    public function getSmilesBalanceAttribute(){
+        return getSmilesBalanace($this->id);
+    }
+    public function getAvatarUrlAttribute(){
+        return asset("storage/media/{$this->avatar}", false);
+    }
+
+    public function storeAvatar(){
+        if(request()->hasFile('image')){
+            $file = storage_path('public/media'.$this->avatar);
+            if(is_file($file) && file_exists($file)){
+                unlink($file);
+            }
+            $path = $file->store('public/media');
+            $this->avatar = basename($path);
+        }
+    }
+
+    public function commonBadges() {
+        return $this->user_badges()->whereIn('badge_id', $this->getBadgeIds() );
+    }
+
+    public function getBadgeIds() {
+        $ids = [];
+        $badges = auth('api')->user()->load('user_badges');
+        $badges = $badges->user_badges;
+        
+        foreach($badges as $badge) {
+            $ids[] = $badge->badge_id;
+        }
+        
+        return $ids;
+    }
+}

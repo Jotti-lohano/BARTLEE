@@ -1,0 +1,420 @@
+.main-page-slider-about-us {
+    background-image: url("../images/shutterstock_552591889.jpg");
+    padding-bottom: 200px;
+    background-size: cover;
+    position: relative;
+    background-position: center;
+}
+
+.main-page-slider-about-us h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 62px;
+}
+
+.main-page-slider-about-us span {
+    color: white;
+}
+
+.main-page-slider-about-us .btn-secondary {
+    background-color: #ffff;
+    color: #69c09c;
+    margin-top: 24px;
+}
+
+.main-page-slider-about-us .phone-box {
+    /* width: auto;
+    height: 80px; */
+    background-color: #ffff;
+    border-radius: 5px;
+    padding: 24px;
+    position: absolute;
+    right: 200px;
+    bottom: -28px;
+    text-align: center;
+    color: #000;
+    box-shadow: 0px 4px 5px #efeff5;
+}
+
+.main-page-slider-about-us .phone-box .fa-phone-alt {
+    background-color: #69c09c;
+    border-radius: 50%;
+    color: #ffff;
+    padding: 8px;
+}
+
+.main-page-slider-about-us .phone-box span {
+    color: #000;
+}
+
+.main-page-slider-about-us .for-slider .social-icons ul {
+    list-style: none;
+}
+
+.main-page-slider-about-us .for-slider .social-icons ul li {
+    color: #ffff;
+    margin-bottom: 25px;
+}
+
+.main-page-slider-about-us .for-slider .social-icons ul li a {
+    color: #ffff;
+}
+
+.main-page-slider-about-us .for-slider {
+    position: relative;
+    padding-top: 50px;
+}
+
+.main-page-slider-about-us .for-slider .social-icons {
+    position: absolute;
+    top: 14%;
+    bottom: 0;
+    padding: 0px 30px;
+}
+
+.navbar-light .navbar-nav .active>.nav-link,
+.navbar-light .navbar-nav .nav-link.activ {
+    color: #52b68d;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffff;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #52b68d;
+}
+
+.resubscribe-box {
+    margin-top: 2rem;
+    color: #000;
+    padding-top: 45px;
+    position: relative;
+    padding-bottom: 45px;
+}
+
+.resubscribe-box .for-user-bg h4 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 3rem;
+}
+
+.resubscribe-box .for-user-bg {
+    background-color: white;
+    color: #000;
+    padding: 60px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 8px solid #52b68d;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.resubscribe-box .for-user-bg .green-button {
+    background-color: #52b68d;
+    padding: 12px 50px;
+    color: white;
+    text-decoration: none;
+}
+
+.resubscribe-box .for-user-bg .price-card .columns {
+    float: left;
+    width: 100%;
+    padding: 8px;
+}
+
+.resubscribe-box .for-user-bg .price-card .price {
+    list-style-type: none;
+    border: 1px solid #eee;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.resubscribe-box .for-user-bg .price-card .price .header {
+    background-color: #2a9a6b;
+    color: white;
+    font-size: 25px;
+}
+
+.resubscribe-box .for-user-bg .price-card .price li {
+    /* border-bottom: 1px solid #eee; */
+    padding: 6px 20px;
+    text-align: center;
+}
+
+.resubscribe-box .for-user-bg .price-card .price span {
+    font-size: 40px;
+    color: #000;
+    font-weight: bold;
+}
+
+.resubscribe-box .for-user-bg .price-card .continue-btn {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.resubscribe-box .resubscribe-modal .modal-header {
+    border: none;
+    display: inline;
+    text-align: center;
+}
+
+.resubscribe-box .resubscribe-modal .modal-header h4 {
+    padding-top: 2rem;
+}
+
+.resubscribe-box .resubscribe-modal .modal-body {
+    padding: 1rem 3rem;
+}
+
+.resubscribe-box .resubscribe-modal .modal-footer {
+    border: none;
+    align-self: center;
+    padding-top: 0px;
+    padding-bottom: 25px;
+}
+
+.resubscribe-box .resubscribe-modal .modal-footer .modal-subscribe-btn {
+    padding: 10px;
+    color: #ffff;
+    text-decoration: none;
+    background-color: #52b68d;
+}
+
+.emplyee-add-modal-msg .modal-content .modal-body {
+    text-align: center;
+    padding-bottom: 3rem;
+}
+
+.emplyee-add-modal-msg .modal-content .modal-body .modal-green-text {
+    color: #52b68d;
+}
+
+.emplyee-add-modal-msg .modal-content .modal-body h4 {
+    margin-top: 10px;
+}
+
+.emplyee-add-modal-msg .modal-content .fa-check-circle {
+    color: #52b68d;
+    box-shadow: 0px 0px 0px 7px #cfefdc;
+    border-radius: 50px;
+}
+
+.emplyee-add-modal-msg .modal-content .modal-header {
+    border: none;
+}
+
+.emplyee-add-modal-msg .modal-content .fa-exclamation-circle {
+    color: #52b68d;
+    box-shadow: 0px 0px 0px 7px #cfefdc;
+    border-radius: 50px;
+}
+
+.help-form {
+    margin-top: 5rem;
+    background-image: url("../images/BG.jpg");
+    height: 250px;
+    background-size: cover;
+    color: #ffff;
+    padding-top: 45px;
+    position: relative;
+    padding-bottom: 45px;
+    margin-bottom: 20rem;
+}
+
+.help-form .for-bg {
+    background-color: white;
+    color: #000;
+    padding: 60px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 8px solid #52b68d;
+}
+
+.help-form .for-bg h1 {
+    font-weight: bold;
+}
+
+.help-form .for-bg span {
+    color: #999999;
+}
+
+.help-form .for-bg .text-green {
+    color: #196e4b;
+}
+
+.help-form .for-bg .green-button {
+    background-color: #52b68d;
+    padding: 12px 40px;
+    color: white;
+    text-decoration: none;
+}
+
+.help-form .white-rectangle {
+    position: absolute;
+    right: 0;
+    top: -58px;
+}
+
+.help-form .white-rectangle img {
+    width: 70%;
+}
+
+.page-footer .btn-outline-secondary {
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #52b68d;
+    border: #52b68d;
+    color: white;
+}
+
+.page-footer ul li a {
+    color: #858585;
+}
+
+.page-footer p {
+    color: #858585;
+}
+
+.page-footer img {
+    padding-bottom: 16px;
+}
+
+.main-page-slider-about-us .for-nav .left-nav ul li a {
+    color: #858585;
+}
+
+.main-page-slider-about-us .for-nav .left-nav img {
+    border-radius: 50px;
+    background-color: #e1e1e1;
+    padding: 5px;
+}
+
+.main-page-slider-about-us .for-nav .left-nav .btn-secondary {
+    background-color: transparent;
+    border: none;
+    margin-top: 0px;
+}
+
+.main-page-slider-about-us .for-nav .navbar-brand {
+    margin-right: 6rem;
+}
+
+.main-page-slider-about-us .for-nav .navbar-nav {
+    text-align: center;
+}
+
+.main-page-slider-about-us .for-nav .navbar-toggler {
+    background-color: #52b68dc2;
+}
+
+.page-footer .footer-social-icon a {
+    color: #999999;
+}
+
+.page-footer .footer-social-icon a:hover {
+    color: #51b68c;
+}
+
+
+/* @media (max-width: 576px) {
+    .help-form {
+        margin-bottom: 35rem;
+    }
+    .help-form .for-bg .green-button {
+        padding: 12px 32px;
+    }
+    .main-page-slider-about-us .for-slider .social-icons {
+        display: none;
+    }
+    .main-page-slider-about-us h1 {
+        font-size: 25px;
+    }
+    .main-page-slider-about-us .phone-box {
+        right: 0px;
+    }
+    .view-property-box .owl-theme {
+        width: 100%;
+    }
+    .view-property-box .employee-deatail-box .employee-remove-btn {
+        padding: 7px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-page-slider-about-us .for-slider .social-icons {
+        padding: 0px 0px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .main-page-slider-about-us .for-slider .social-icons {
+        padding: 0px 0px;
+    }
+    .view-property-box .employee-deatail-box .employee-remove-btn {
+        padding: 7px;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .main-page-slider-about-us .for-slider .social-icons {
+        padding: 0px 0px;
+    }
+} */
+
+@media (max-width: 575.98px) {
+    .help-form {
+        margin-bottom: 35rem;
+        margin-top: 10rem;
+    }
+    .help-form .for-bg .green-button {
+        padding: 12px 32px;
+    }
+    .main-page-slider-about-us .for-slider .social-icons {
+        display: none;
+    }
+    .main-page-slider-about-us h1 {
+        font-size: 25px;
+    }
+    .main-page-slider-about-us .phone-box {
+        right: 0px;
+    }
+    .view-property-box .owl-theme {
+        width: 100%;
+    }
+    .view-property-box .employee-deatail-box .employee-remove-btn {
+        padding: 7px;
+    }
+    .view-property-box .edit-property-btn {
+        margin-top: 5px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .help-form {
+        margin-bottom: 35rem;
+        margin-top: 10rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .view-property-box .employee-deatail-box .employee-remove-btn {
+        padding: 7px;
+    }
+    .main-page-slider-about-us .for-slider .social-icons {
+        padding: 0px 0px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .main-page-slider-about-us .for-slider .social-icons {
+        padding: 0px 0px;
+    }
+}
+
+@media (min-width: 1200px) {}
