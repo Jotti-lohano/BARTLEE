@@ -6,23 +6,28 @@ use Carbon\Carbon;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 
 class NotificationController extends Controller
 {
     public function index(Request $request)
     { 
+       
         if (!auth('api')->check()) {
             return api_error('Message: Login required');
         }
+     
 
-        $notifications = Notification::orderBy('created_at', 'DESC')->where('notifiable_id', auth()->user()->id)->get();
+        $notifications = Notification::orderBy('created_at', 'DESC')->where('notifiable_id', auth('api')->user()->id)->where('read_at', null)->paginate(10);
         $success['notifications'] = $notifications;
-        return response()->json($success);
+        return $this->response->success(
+            NotificationResource::collection($notifications) );
+       
     }
 
     public function count()
     {
-        $count = Notification::orderBy('created_at', 'DESC')->where('notifiable_id', auth()->user()->id)->where('read_at', null)->count();
+        $count = Notification::orderBy('created_at', 'DESC')->where('notifiable_id', auth('api')->user()->id)->where('read_at', null)->count();
         return response()->json(["notification_count" => $count]);
     }
 

@@ -2,30 +2,22 @@
 //
 
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Api\Artist\ArtistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Api\Home\FeedController;
 use App\Http\Controllers\Api\User\AuthController;
-use App\Http\Controllers\Api\Badge\PostController;
-use App\Http\Controllers\Api\Badge\BadgeController;
-use App\Http\Controllers\Api\Story\StoryController;
-use App\Http\Controllers\Api\User\ProfileController;
-use App\Http\Controllers\Api\Reward\RewardController;
+
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Api\Package\PackageController;
 use App\Http\Controllers\Api\Business\BusinessController;
-use App\Http\Controllers\Api\Business\MedicineController;
-use App\Http\Controllers\Api\Reminders\JoggingController;
-use App\Http\Controllers\Api\Reminders\StretchController;
-use App\Http\Controllers\Api\Reminders\DrinkingController;
-use App\Http\Controllers\Api\Challenge\ChallengeController;
-use App\Http\Controllers\Api\Reminders\AppointmentController;
-use App\Http\Controllers\Api\Reminders\AllRemindersController;
-use App\Http\Controllers\Api\Reminders\MedicineReminderController;
-use App\Http\Controllers\Api\Boost\FeedController as BoostFeedController;
-use App\Http\Controllers\Api\Event\EventController as EventEventController;
-use App\Http\Controllers\Api\Offer\OfferController as OfferOfferController;
+use App\Http\Controllers\Admin\AdminController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +43,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('resend-verification-token', [AuthController::class, 'resendVerificationCode']);
         Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('reset-password', [AuthController::class, 'resetPassword']);
-        Route::post('create-profile', [AuthController::class, 'createProfile']);
+        Route::post('create-profile', [AuthController::class, 'createBusinsessProfile']);
         Route::post('create-patient-profile', [AuthController::class, 'createPatientProfile']);
         Route::get('get-profile', [AuthController::class, 'getProfile']);
         Route::post('edit-profile', [AuthController::class, 'editProfile']);
@@ -62,9 +54,24 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('delete-user', [AuthController::class, 'userDelete']);
 
         //Medicine
-        Route::post('create-medicine', [MedicineController::class, 'createMedicine']);
+        Route::post('upload-media', [ArtistController::class, 'uploadMedia']);
         Route::get('get-business-list', [BusinessController::class, 'getBusinessList']);
+        Route::get('get-skill-list', [BusinessController::class, 'getSkillList']);
+        Route::post('add-skill', [BusinessController::class, 'addSkill']);
+        // dashboard-record
+        Route::get('dashboard-record', [HomeController::class, 'dashboardRecords']);
         Route::get('get-artists', [BusinessController::class, 'getArtists']);
+        Route::get('get-artists-detail/{id}', [BusinessController::class, 'getArtistsUser']);
+        Route::get('get-business', [BusinessController::class, 'getBusiness']);
+        Route::get('get-business-detail/{user}', [BusinessController::class, 'getBusinessUser'])->name('userbusiness');
+        Route::get('business-status/{id}/{status}',[BusinessController::class, 'updateStatus']);
+        Route::get('get-feedback', [GeneralController::class, 'getFeedback']);
+        Route::get('get-feedback-detail/{id}', [GeneralController::class, 'getFeedbackDetail']);
+
+        Route::post('add-business', [BusinessController::class, 'addBusiness']);
+        
+       
+             
         Route::post('delete-medicine', [MedicineController::class, 'deleteMedicine']);
 
 
@@ -78,6 +85,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('contact-us', [AuthController::class, 'contactUs']);
         Route::get('privacy_policy', [AuthController::class, 'privacyPolicy']);
         Route::get('terms_condition', [AuthController::class, 'termsCondition']);
+        Route::get('privacy_policy_featured_artist', [AuthController::class, 'privacyPolicyForArtist']);
+        Route::get('terms_condition_featured_artist', [AuthController::class, 'termsConditionForArtist']);
 
 
 
@@ -88,23 +97,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('update-appointment-reminder', [AppointmentController::class, 'updateAppointmentReminder']);
         Route::post('set-appointment-notification', [AppointmentController::class, 'setAppointmentNotification']);
 
-
-        //3- Drinking
-        Route::get('list-drinking-reminder', [DrinkingController::class, 'listDrinkingReminder']);
-        Route::post('set-drinking-reminder', [DrinkingController::class, 'setDrinkingReminder']);
-        Route::post('update-drinking-reminder', [DrinkingController::class, 'updateDrinkingReminder']);
-        Route::post('set-drinking-notification', [DrinkingController::class, 'setDrinkingNotification']);
-
-
-
-        //4- Jogging
-        Route::post('set-jogging-reminder', [JoggingController::class, 'setJoggingReminder']);
-        Route::post('update-jogging-reminder', [JoggingController::class, 'updateJoggingReminder']);
-        Route::post('set-jogging-notification', [JoggingController::class, 'setJoggingNotification']);
-
-        //5- Stretch
-        Route::post('set-stretch-reminder', [StretchController::class, 'setStretchReminder']);
-        Route::post('update-stretch-reminder', [StretchController::class, 'updateStretchReminder']);
+    
         Route::post('set-stretch-notification', [StretchController::class, 'setStretchNotification']);
 
 
@@ -162,5 +155,22 @@ Route::group(['prefix' => 'v1'], function () {
                 '5 Times',
             ]];
         });
+    });
+
+    Route::group(['prefix' => 'admin'], function () {
+        Route::post('/login', [AdminController::class, 'login']);
+        Route::post('edit-profile', [AuthController::class, 'editProfile']);
+    });
+    Route::group(['prefix' => 'artist'], function () {
+        Route::post('create-artist-profile', [AuthController::class, 'createArtistProfile']);
+        Route::get('get-professions', [ArtistController::class, 'getProfessions']);
+        Route::get('get-your-work', [ArtistController::class, 'getWorks']);
+        Route::post('add-new-content', [ArtistController::class, 'uploadContent']);
+        Route::get('get-features', [GeneralController::class, 'getFeatures']);
+        Route::post('payment', [GeneralController::class, 'FeaturePayment']);
+        Route::get('paymentLogs', [GeneralController::class, 'paymentLogs']);
+        Route::post('edit-profile', [ArtistController::class, 'editProfile']);
+        Route::post('renewFeature', [GeneralController::class, 'renewFeature']);
+        
     });
 });

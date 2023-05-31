@@ -15,7 +15,7 @@ class CreateArtistSkillsTable extends Migration
     {
         Schema::create('artist_skills', function (Blueprint $table) {
             $table->id(); 
-            $table->integer('user_profile_id')->nullable();
+            $table->integer('user_artist_id')->nullable();
             $table->integer('skill_id')->nullable();
             $table->timestamps();
         });

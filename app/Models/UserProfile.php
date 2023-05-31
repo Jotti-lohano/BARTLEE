@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Models\Profession;
+use App\Models\City;
 use App\Models\ArtistSkills;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserProfile extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['first_name', 'last_name', 'location', 'gender', 'email', 'phone', 'user_type', 'country_code'];
+    protected $fillable = ['first_name', 'last_name', 'name','location', 'gender', 'email', 'phone', 'user_type', 'country_code'];
 
     protected $table = 'user_profile';
 
@@ -55,20 +57,30 @@ class UserProfile extends Model
         return $this->hasOne(business_details::class, 'user_profile_id');
     }
 
-    public function artist_skills()
+    
+    public function UserArtist()
     {
-        return $this->hasMany(ArtistSkills::class, 'user_profile_id');
+        return $this->hasOne(UserArtist::class, 'user_profile_id');
     }
 
-    public function artist_work()
+    public function getStatusAttribute($value): string
     {
-        return $this->hasMany(ArtistWork::class, 'user_profile_id');
-    }
-    public function UserArist()
-    {
-        return $this->hasMany(UserArtist::class, 'user_profile_id');
+       return $value == 1 ? 'Active' : 'In-active';
     }
 
+    public function getCountryAttribute($value): string
+    {
+
+        return Country::where('id',$value)->pluck('country')->first();
+    }
+
+    public function getCityAttribute($value): string
+    {
+
+        return City::where('id',$value)->pluck('city')->first();
+    }
+  
+   
   
 
 }

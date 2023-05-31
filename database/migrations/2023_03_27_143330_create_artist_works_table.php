@@ -15,7 +15,7 @@ class CreateArtistWorksTable extends Migration
     {
         Schema::create('artist_works', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_profile_id')->nullable();
+            $table->integer('user_artist_id')->nullable();
             $table->string('content')->comment('video,audio,urls')->nullable();
             $table->timestamps();
         });

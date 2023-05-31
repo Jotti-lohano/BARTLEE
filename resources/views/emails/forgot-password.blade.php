@@ -5,4 +5,4 @@
 <strong>Email was Generated at {{ date("F jS Y h:i:s A") }}</strong>
 
 <h4>Best Regards:</h4>
-<h4>iMeds</h4>
+<h4>BARTLEE</h4>

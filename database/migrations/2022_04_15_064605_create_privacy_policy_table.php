@@ -16,6 +16,7 @@ class CreatePrivacyPolicyTable extends Migration
         Schema::create('privacy_policy', function (Blueprint $table) {
             $table->id();
             $table->text('description');
+            $table->integer('for_featured_artist')->comment('1 => for featured , 0 => not')->default(0);
             $table->timestamps();
         });
     }

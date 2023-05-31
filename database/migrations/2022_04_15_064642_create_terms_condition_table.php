@@ -16,6 +16,7 @@ class CreateTermsConditionTable extends Migration
         Schema::create('terms_condition', function (Blueprint $table) {
             $table->id();
             $table->text('description');
+            $table->integer('for_featured_artist')->comment('1 => for featured , 0 => not')->default(0);
             $table->timestamps();
         });
     }

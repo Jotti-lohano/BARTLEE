@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\City;
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\business_details;
 use App\Models\Badge;
 use App\Models\Sticker;
 use App\Models\Category;
@@ -15,6 +14,7 @@ use App\Models\ContactUs;
 use App\Models\UserBadge;
 use App\Models\UserGroup;
 use App\Models\StoreToken;
+use App\Models\UserArtist;
 use App\Models\UserProfile;
 use Illuminate\Support\Arr;
 use App\Models\BusinessType;
@@ -22,11 +22,13 @@ use App\Models\UserBusiness;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\BusinessSticker;
+use App\Models\business_details;
 use App\Notifications\AdminNotify;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\changePassword;
 use App\Notifications\PushNotification;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Requests\User\LoginRequest;
@@ -46,8 +48,19 @@ use App\Http\Requests\User\UpdateProfileInfoRequest;
 
 class AuthController extends Controller
 {
-    public function signup(SignupRequest $request)
-    {
+    public function signup(Request $request)
+    {        
+        // $data = User::find(10);
+        // $mailInfo = [
+        //     'user' => $data,
+        //     'mail_for' => 'email_verification'
+        // ];
+
+        // $jj = api_send_mail($mailInfo);
+
+        // dd('zzzz asdasd', $jj);
+
+   
         try {
 
             $data = new User;
@@ -83,7 +96,8 @@ class AuthController extends Controller
                 'mail_for' => 'email_verification'
             ];
 
-            api_send_mail($mailInfo);
+            $jj = api_send_mail($mailInfo);
+
 
             return api_success('User created successfully!', ['user' => $data]);
         } catch (\Exception $e) {
@@ -95,15 +109,39 @@ class AuthController extends Controller
     {
         try {
 
-            $data = auth()->user();
-            if ($data) {
-                $data->status = 2;
-                $data->save();
-                $data->delete();
-                $profile = UserProfile::where('user_id', auth()->user()->id)->delete();
+            if (!auth('api')->check()) {
+                return api_error('Message: Login required');
+            }
+    
+            $user = auth()->user();
+
+            if ($user) {
+                
+                if ($user->user_type ==  "artist") {
+             
+                
+                 UserProfile::with(['UserArtist.artist_profession','UserArtist.artist_skills.skill:id,skill', 'UserArtist.artist_work:id,user_artist_id,content'])->where('user_id',auth('api')->user()->id)->delete();
+                   
+                  // $user['profile_complete'] = true;
+                   
+                }
+                else {
+                 
+                 UserProfile::with('User','user_business_detail')->where('user_id',auth('api')->user()->id)->delete();
+                  
+                    $user->delete();
+                }
                 $data = api_success1('account deleted');
                 return response()->json($data, Response::HTTP_OK);
-            }
+            } 
+            // if ($data) {
+            //     $data->status = 2;
+            //     $data->save();
+            //     $data->delete();
+            //     $profile = UserProfile::where('user_id', auth()->user()->id)->delete();
+            //     $data = api_success1('account deleted');
+            //     return response()->json($data, Response::HTTP_OK);
+            // }
         } catch (\Exception $e) {
             $data = api_error($e->getMessage());
             return response()->json($data, Response::HTTP_BAD_REQUEST);
@@ -196,6 +234,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+      
         try {
             // for login with both username and password
             // if ($request->exists('phone') && $request->filled('phone') && $request->filled('country_code')) {
@@ -208,6 +247,7 @@ class AuthController extends Controller
                 return api_error('Invalid credentials.');
             }
             $user = $request->user();
+    
             if (!$user->status) {
                 return api_error('Please verify your email address');
             }
@@ -225,7 +265,7 @@ class AuthController extends Controller
             $user->save();
 
             $tokenObj = $user->createToken('user access token');
-            return $tokenObj;
+            
             $token = $tokenObj->token;
             $token->device_token = request('device_token');
             $token->device_type = request('device_type');
@@ -284,7 +324,7 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
+    public function  resetPassword(ResetPasswordRequest $request)
     {
         $verify = StoreToken::where('token', $request->code)->first();
         if (!empty($verify)) {
@@ -303,7 +343,7 @@ class AuthController extends Controller
     }
 
 
-    public function createProfile(CreateProfileRequest $request)
+    public function createBusinsessProfile(CreateProfileRequest $request)
     {
 
         if (!auth('api')->check()) {
@@ -328,6 +368,7 @@ class AuthController extends Controller
                 $dataMain = User::whereId(auth()->user()->id)->first();
                 $dataMain->first_name =  $request->first_name ? $request->first_name : $dataMain->first_name;
                 $dataMain->last_name = $request->last_name ?? $user->last_name;
+               
                 $dataMain->username = $request->first_name . '' . $request->last_name;
                 $dataMain->phone = $request->phone_number ?? $user->phone_number;
                 $dataMain->country_code = $request->country_code ?? $user->country_code;
@@ -339,6 +380,7 @@ class AuthController extends Controller
                 $data->user_id = auth()->user()->id;
                 $data->first_name = $request->first_name ?? $user->first_name;
                 $data->last_name = $request->last_name ?? $user->last_name;
+                $dataMain->name = $request->first_name . '' . $request->last_name;
                 $data->user_type = 'business';
                 $data->phone_number = $request->phone_number ?? $user->phone_number;
                 $data->email = $dataMain->email;
@@ -377,7 +419,7 @@ class AuthController extends Controller
                     $businessData->business_type = $request->business_type;
                     $businessData->about_company = $request->about_company;
 
-                    if ($request->has('company_avatar')) {
+                    if ($request->has('companycreatePatientProfile_avatar')) {
                         $fileName = time() . '_' . $request->company_avatar->getClientOriginalName();
                         $filePathAvatar = $request->file('company_avatar')->storeAs('user/avatar', $fileName, 'public');
                         $businessData->avatar = $fileName;
@@ -403,9 +445,10 @@ class AuthController extends Controller
         }
     }
 
-    public function createPatientProfile(CreateProfileRequest $request)
+    public function createArtistProfile(CreateProfileRequest $request)
     {
 
+        
         if (!auth('api')->check()) {
             return api_error('Message: Login required');
         }
@@ -413,6 +456,7 @@ class AuthController extends Controller
         try {
 
             $checkUser = UserProfile::whereUserId(auth()->user()->id)->first();
+            $user = User::whereId(auth()->user()->id)->first();
             if ($checkUser) {
                 return api_error('Profile Already Created.');
             } else {
@@ -425,17 +469,34 @@ class AuthController extends Controller
                 }
 
                 $dataMain = User::whereId(auth()->user()->id)->first();
-                $dataMain->first_name = $request->first_name != '' ?  $request->first_name : $dataMain->first_name;
-                $dataMain->last_name = $request->last_name != '' ?  $request->last_name : $dataMain->last_name;
+                $dataMain->first_name =  $request->first_name ? $request->first_name : $dataMain->first_name;
+                $dataMain->last_name = $request->last_name ?? $user->last_name;
                 $dataMain->username = $request->first_name . '' . $request->last_name;
-                $dataMain->phone = $request->phone_number != '' ?  $request->phone_number : $dataMain->phone_number;
-                $dataMain->country_code = $request->country_code != '' ?  $request->country_code : $dataMain->country_code;
-                $dataMain->user_type = 'patient';
+                $dataMain->phone = $request->phone_number ?? $user->phone_number;
+                $dataMain->country_code = $request->country_code ?? $user->country_code;
+                $dataMain->user_type = 'artist';
                 $dataMain->avatar =  $avatar;
                 $dataMain->save();
 
+                $data = new UserProfile();
+                $data->user_id = auth()->user()->id;
+                $data->first_name = $request->first_name ?? $user->first_name;
+                $data->last_name = $request->last_name ?? $user->last_name;
+                $dataMain->name = $request->first_name . '' . $request->last_name;
+                $data->user_type = 'artist';
+                $data->phone_number = $request->phone_number ?? $user->phone_number;
+                $data->email = $dataMain->email;
+                $data->gender = $request->gender ?? $user->gender;
+                $data->country_code = $request->country_code ?? $user->country_code;
+                $data->avatar = $avatar;
+                $data->status = 1;
+
+               
+
+
+
                 $dataMain->notify(new PushNotification(
-                    'User Has Been Registered As Patient',
+                    'User Has Been Registered As business',
                     'User Id: ' . $dataMain->id,
                     [
                         'content_id' => $dataMain->id
@@ -444,33 +505,66 @@ class AuthController extends Controller
                 ));
 
 
-                $data =  $request->only([
-                    'first_name', 'last_name', 'phone_number', 'phone_number', 'patient_DOB', 'gender', 'patient_bloodType', 'patient_description', 'patient_diseases'
-                ]);
-
-                $data = new UserProfile();
-                $data->user_id = auth()->user()->id;
-                $data->country_code = $dataMain->country_code;
-                $data->email = $dataMain->email;
-                $data->first_name = $request->first_name;
-                $data->last_name = $request->last_name;
-                $data->user_type = 'patient';
-                $data->phone_number = $request->phone_number;
-                $data->patient_DOB = $request->patient_DOB;
-                $data->gender = $request->gender;
-                $data->patient_bloodType = $request->patient_bloodType;
-                $data->patient_description = $request->patient_description;
-                $data->patient_diseases = $request->patient_diseases;
-                $data->status = 1;
-                $data->avatar =  $avatar;
-
                 if ($request->has('avatar')) {
                     $fileName = time() . '_' . $request->avatar->getClientOriginalName();
                     $filePathAvatar = $request->file('avatar')->storeAs('user/avatar', $fileName, 'public');
-                    $data->avatar = $filePathAvatar;
+                    $data->avatar = $fileName;
                 }
 
+
+             
+
+               
+
+
+
                 if ($data->save()) {
+
+                    $UserArtist = new UserArtist();
+                    $UserArtist->user_profile_id = $data->id;
+                    $UserArtist->about_yourself = $request->about_yourself;
+                    $UserArtist->years_of_experience = $request->years_of_experience;
+                    $UserArtist->company_name = $request->company_name;
+                    $UserArtist->artist_profession = $request->artist_profession;
+                    $UserArtist->is_featured = $request->is_featured;
+
+                    if ($request->has('artist_avatar')) {
+                        $fileName = time() . '_' . $request->artist_avatar->getClientOriginalName();
+                        $filePathAvatar = $request->file('artist_avatar')->storeAs('user/avatar', $fileName, 'public');
+                        $UserArtist->profile_picture = $fileName;
+                    }
+               
+                    $UserArtist->save();
+
+                    if($request->skills){
+
+                        foreach($request->skills as $skill){
+                            
+                        
+                            $UserArtist->artist_skills()->create([
+                                'skill_id' => $skill,
+                            ]);
+                        }
+                    }
+
+
+                    if($request->hasfile('upload_content')){
+
+                        foreach($request->file('upload_content') as $file){
+                            $name = time().$file->getClientOriginalName();
+                            $file->move(public_path('artist_content'),$name);
+                            $contentName = 'artist_content/'.$name;
+                            $UserArtist->artist_work()->create([
+                                'content' =>$contentName,
+                               
+                            ]);
+                        }
+                    }
+
+              
+
+
+
                     $admin_notify = Admin::where('id', 1)->first();
                     Notification::send($admin_notify, new AdminNotify([
                         'title' => 'New user Registered',
@@ -479,31 +573,35 @@ class AuthController extends Controller
                         'route' => 'admin.users.index',
 
                     ]));
-                    return api_success1('Profile Created successfully');
+    
+                   $userData = User::with('user_profile.UserArtist')->where('id',auth()->user()->id)->first(); 
+                    return api_success('Profile Created successfully',$userData );
                 }
+
             }
         } catch (\Exception $ex) {
-            return api_error('message: ' . $ex->getMessage(), 500);
+            return api_error('message: ' . $ex->getMessage(), 500 ) ;
         }
     }
 
     public function getProfile()
     {
+        
      
         if (auth('api')->check()) {
-         
-            $user = UserProfile::where('user_id',Auth()->user()->id)->first();
-          
+            // dd(auth('api')->user()->id);
+            $user = UserProfile::where('user_id', auth('api')->user()->id)->first();
+        
             if ($user) {
                 $user['profile_complete'] = true;
                 if ($user->user_type ==  "artist") {
                 
-                  $user = UserProfile::with(['UserArist.artist_profession','artist_skills', 'artist_work'])->where('user_id',auth()->user()->id)->first();
+                  $user = UserProfile::with(['UserArtist.artist_profession','UserArtist.artist_skills.skill:id,skill', 'UserArtist.artist_work:id,user_artist_id,content'])->where('user_id',auth('api')->user()->id)->first();
                     // $user['profile_complete'] = true;
                 }
                 else {
                   
-                    $user = UserProfile::with('user_business_detail')->where('user_id',auth()->user()->id)->first();
+                    $user = UserProfile::with('user_business_detail')->where('user_id',auth('api')->user()->id)->first();
                 }
             } 
 
@@ -515,16 +613,18 @@ class AuthController extends Controller
         }
     }
 
-    public function editProfile(EditProfileRequest $request)
-    {
+    public function editProfile(Request $request)
+    { 
 
+    
         if (!auth('api')->check()) {
             return api_error('Message: Login required');
         }
 
         try {
-
-            $dataMain = User::whereId(auth()->user()->id)->first();
+           
+            $dataMain = User::whereId(auth('api')->user()->id)->first();
+         
             $dataMain->first_name = $request->first_name ? $request->first_name : $dataMain->first_name;
             $dataMain->last_name = $request->last_name ? $request->last_name : $dataMain->last_name;
             $dataMain->username = ($request->first_name ?  $request->first_name : $dataMain->first_name)  . '' . ($request->last_name ? $request->last_name : $dataMain->last_name);
@@ -541,20 +641,35 @@ class AuthController extends Controller
 
             $dataMain->avatar = $avatar;
 
+          
+            if ($request->avatar_url) {
+                
+                $fileName = time() . '_' . $request->avatar_url->getClientOriginalName();
+               
+                //$filePathAvatar = $request->file('avatar_url')->storeAs('user/avatar', $fileName, 'public');
+                $request->avatar_url->move(public_path('storage/user/avatar'), $fileName); 
+                $dataMain->avatar = $fileName;
+
+                
+            }
+
             if ($request->has('avatar')) {
+                
                 $fileName = time() . '_' . $request->avatar->getClientOriginalName();
-                $filePathAvatar = $request->file('avatar')->storeAs('user/avatar', $fileName, 'public');
+                $filePathAvatar = $request->file('avatar')->storeAs('storage/user/avatar', $fileName, 'public');
+                
                 $dataMain->avatar = $fileName;
             }
 
             $dataMain->save();
-
-            $data = UserProfile::whereuserId(auth()->user()->id)->first();
            
-            $data->first_name = $request->first_name;
-            $data->last_name = $request->last_name;
-            $data->phone_number = $request->phone_number;
-            $data->country_code = $request->country_code;
+
+            $data = UserProfile::whereuserId(auth('api')->user()->id)->first();
+           
+            $data->first_name = $request->first_name  ? $request->first_name : $data->first_name;;
+            $data->last_name = $request->last_name ? $request->last_name : $data->last_name; 
+            $data->phone_number = $request->phone_number  ? $request->phone_number :  $data->phone;;
+            $data->country_code = $request->country_code ? $request->country_code : $data->country_code ;;
        
             $data->gender = $request->gender;
           
@@ -563,10 +678,21 @@ class AuthController extends Controller
 
             if ($request->has('avatar')) {
                 $fileName = time() . '_' . $request->avatar->getClientOriginalName();
-                $filePathAvatar = $request->file('avatar')->storeAs('user/avatar', $fileName, 'public');
+              
+                $request->avatar_url->move(public_path('storage/user/avatar'), $fileName); 
                 $data->avatar = $fileName;
             }
 
+               
+            if ($request->avatar_url) {
+               
+                $fileName = time() . '_' . $request->avatar_url->getClientOriginalName();
+                
+               // $filePathAvatar = $request->file('avatar_url')->storeAs('storage/user/avatar', $fileName, 'public');
+              // $request->avatar_url->move(public_path('storage/user/avatar'), $fileName); 
+                $data->avatar = $fileName;
+            }
+           
             if ($data->save()) {
                 return api_success("Profile updated successfully", $dataMain);
             }
@@ -604,24 +730,42 @@ class AuthController extends Controller
 
     public function privacyPolicy()
     {
-        $policy = DB::table('privacy_policy')->first();
+        $policy = DB::table('privacy_policy')->where('for_featured_artist',0)->first();
         return response()->json($policy);
     }
 
     public function termsCondition()
     {
-        $terms = DB::table('terms_condition')->first();
+        $terms = DB::table('terms_condition')->where('for_featured_artist',0)->first();
         return response()->json($terms);
     }
 
-    public function changePassword(Request $request)
+    public function privacyPolicyForArtist()
     {
+        $policy = DB::table('privacy_policy')->where('for_featured_artist',1)->first();
+        return response()->json($policy);
+    }
 
+    public function termsConditionForArtist()
+    {
+        $terms = DB::table('terms_condition')->where('for_featured_artist',1)->first();
+        return response()->json($terms);
+    }
+
+    public function changePassword(changePassword $request)
+    {
+      
         if (Hash::check($request->current_password, auth('api')->user()->password)) {
             $user = auth('api')->user();
+        
+            // if($request->new_password ==  $request->confirm_new_password){
+              
             $user->password =  bcrypt($request->new_password);
             $user->save();
             return $this->sendResponse($user, __('Password has been updated successfully'));
+            // }else{
+            //     return $this->sendError(__('Password and ConfirmPassword Does Not Matched'), false);
+            // }
         }
         return $this->sendError(__('current password in not valid'), false);
     }

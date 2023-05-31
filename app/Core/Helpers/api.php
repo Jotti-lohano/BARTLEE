@@ -51,6 +51,7 @@ function api_error($message, $httpcode = 422)
 
 function api_send_mail($mailInfo)
 {
+    // return $msailInfo;
     try {
         $user = $mailInfo['user'];
         $mailFor = $mailInfo['mail_for'];
@@ -66,7 +67,7 @@ function api_send_mail($mailInfo)
         }
 
         $getTokenData = storeToken($user->email);
-
+ 
         Mail::send($template, ['code' => $getTokenData['response']['token'], 'user' => $user->first_name . ' ' . $user->last_name], function ($message) use ($user, $subject) {
             $message->from(config('mail.from.address'), config('mail.from.name'));
             $message->to($user->email, $user->first_name . ' ' . $user->last_name);

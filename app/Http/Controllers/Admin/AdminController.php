@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\BusinessLog;
+use Carbon\Carbon;
 use App\Models\Fact;
-use App\Models\ReminderLogs;
-use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserBadge;
-use App\Models\UserBusiness;
-use App\Models\UserDidYouKnow;
-use App\Models\UserPackages;
 use App\Models\UserSmile;
+use App\Models\BusinessLog;
+use App\Models\Transaction;
+use Illuminate\Support\Arr;
+use App\Models\ReminderLogs;
+use App\Models\UserBusiness;
+use App\Models\UserPackages;
 use Illuminate\Http\Request;
+use App\Models\UserDidYouKnow;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Requests\User\LoginRequest;
 
 class AdminController extends Controller
 {
@@ -26,107 +31,11 @@ class AdminController extends Controller
         $total_users = User::where('status',1)->where('user_type','!=','user')->count();
         $total_medicine_reminder= ReminderLogs::where('reminderable_type','App\Models\MedicineReminder')->count();
         $total_appointment_reminder= ReminderLogs::where('reminderable_type','App\Models\AppointmentReminder')->count();
-        // $total_users_filtered = User::where('user_type','user')
-        //     ->when(request('total_users_duration') != 'all',function($q){
-        //         $q->whereBetween('created_at',[
-        //             now()->subDays( request('total_users_duration',1) )->startOfDay(),
-        //             now()->endOfDay() 
-        //         ]);
-        //     })
-        //     ->count();
-        // $total_businesses = User::where('user_type','business')->count();
-        // $total_businesses_filtered = User::where('user_type','business')
-        // ->when(request()->filled('business_type'),function($q){
-        //     $q->where('business_type_id',request('business_type'));
-        //     // ->where();
-        // })
-        // ->when(request('total_businesses_duration') != 'all',function($q){
-        //     $q->whereBetween('created_at',[
-        //         now()->subDays( request('total_businesses_duration',1) )->startOfDay(),
-        //         now()->endOfDay() 
-        //     ]);
-        // })
-        // ->count();
-        // $total_badges = UserBusiness::has('badge_media','>',0)->count();
-        // $private_badges = UserBadge::where('is_public',0)->count();
-        // $badges_collected = UserBadge::count();
         
-        // $user_smiles_avg = UserSmile::whereIn('user_id',function($q){
-        //     $q->select('id')
-        //     ->from('users')
-        //     ->where('user_type','user');
-        // })
-        // ->where('type','in')
-        // ->groupBy('user_id')->avg('value')??0;
-
-        // $business_smiles_avg = UserSmile::whereIn('user_id',function($q){
-        //     $q->select('id')
-        //     ->from('users')
-        //     ->where('user_type','business');
-        // })
-        // ->where('type','in')
-        // ->groupBy('user_id')->avg('value')??0;
-
-        // $total_smiles = UserSmile::where('type','in')->sum('value')??0;
-        // $collected_facts = UserDidYouKnow::when(request('facts_duration') != 'all',function($q){
-        //     $q->whereBetween('created_at',[
-        //         now()->subDays( request('facts_duration',1) )->startOfDay(),
-        //         now()->endOfDay() 
-        //     ]);
-        // })->count();
-        // $total_facts = Fact::when(request('total_facts_duration') != 'all',function($q){
-        //     $q->whereBetween('created_at',[
-        //         now()->subDays( request('total_facts_duration',1) )->startOfDay(),
-        //         now()->endOfDay() 
-        //     ]);
-        // })->count();
-        // $trending_places = UserBusiness::with([
-        //     'badge_media',
-        //     'city',
-        //     'country'
-        // ])
-        // ->addSelect([
-        //     'total_visits' => BusinessLog::selectRaw('COUNT(*)')
-        //     ->whereColumn('business_logs.business_id','user_businesses.id')
-        // ])->whereIn('id',function($q){
-        //     $q->select('business_id')
-        //     ->from('business_logs')
-        //     ->whereColumn('business_logs.business_id','user_businesses.id')
-        //     ->where('type','visit')
-        //     ->when(request('trending_duration') != 'all',function($q){
-        //         $q->whereBetween('created_at',[
-        //             now()->subDays( request('trending_duration',1) )->startOfDay(),
-        //             now()->endOfDay() 
-        //         ]);
-        //     });
-        // })
-        // ->when(request()->filled('trending_category'),function($q){
-        //     $q->whereIn('business_id',function($q){
-        //         $q->select('id')
-        //         ->from('users')
-        //         ->where('category_id',request('trending_category'));
-        //     });
-        // })
-        // ->take(4)
-        // ->latest('total_visits')
-        // ->get();
-        // $businesses = User::where('user_type','business')->latest('id')->take(5)->get();
         return response()->json(compact(
             'total_users',
             'total_medicine_reminder',
             'total_appointment_reminder',
-            // 'total_businesses',
-            // 'total_badges',
-            // 'user_smiles_avg',
-            // 'business_smiles_avg',
-            // 'total_smiles',
-            // 'collected_facts',
-            // 'total_facts',
-            // 'businesses',
-            // 'badges_collected',
-            // 'trending_places',
-            // 'total_businesses_filtered',
-            // 'total_users_filtered'
         ));
 
         
@@ -177,5 +86,69 @@ class AdminController extends Controller
         // ->whereNotIn('id',[request('exclude')])
         ->get();
         return response()->json(compact('users'));
+    }
+
+
+    public function login(LoginRequest $request)
+    {
+
+        $type = 'admin';
+       
+        try {
+            // for login with both username and password
+            // if ($request->exists('phone') && $request->filled('phone') && $request->filled('country_code')) {
+            //     $credentials = request(['phone', 'password', 'country_code']);
+            // } else {
+            $credentials = request(['email', 'password']);
+            // }
+
+            if (!Auth::attempt($credentials)) {
+                return api_error('Invalid credentials.');
+            }
+            $user = $request->user();
+    
+            if (!$user->status) {
+                return api_error('Please verify your email address');
+            }
+
+
+            if (strtolower($user->user_type) != strtolower($type)) {
+                return api_error('Invalid Account Type, Only admin users can login');
+            }
+
+            
+            if ($user->status == 2) {
+                return api_error('Your Account is Blocked/Deleted');
+            }
+
+            foreach ($user->tokens as $token) {
+                $token->revoke();
+            }
+
+            $user->device_token = request('device_token');
+            $user->device_type = request('device_type');
+            $user->save();
+
+            $tokenObj = $user->createToken('user access token');
+            
+            $token = $tokenObj->token;
+            $token->device_token = request('device_token');
+            $token->device_type = request('device_type');
+            $token->expires_at = Carbon::now()->addWeeks(4);
+            $token->save();
+
+            $token->accessToken;
+            $token = $tokenObj->accessToken;
+            $user->makeHidden('tokens');
+
+            $data = Arr::add($user->toArray(), 'token_detail', ['access_token' => $token, 'token_type' => 'Bearer',]);
+
+            Artisan::call('schedule:run');
+            // Artisan::call('schedule:work');
+
+            return api_success('Login Successfully', $data);
+        } catch (\Exception $ex) {
+            return api_error('message: ' . $ex->getMessage(), 500);
+        }
     }
 }
