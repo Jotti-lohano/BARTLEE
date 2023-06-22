@@ -234,6 +234,8 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+
+        
       
         try {
             // for login with both username and password
