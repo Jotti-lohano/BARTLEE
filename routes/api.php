@@ -31,6 +31,10 @@ use App\Http\Controllers\Admin\AdminController;
 */
 
 
+
+// Route::get('cookieSet', [AuthController::class, 'setCookie']);
+
+// Route::get('/cookie/get',[AuthController::class, 'getCookie']);
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'user'], function () {
 

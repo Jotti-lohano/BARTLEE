@@ -29,6 +29,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\changePassword;
+use Illuminate\Support\Facades\Cookie;
 use App\Notifications\PushNotification;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Requests\User\LoginRequest;
@@ -47,7 +48,24 @@ use App\Http\Requests\User\ResendVerifyTokenRequest;
 use App\Http\Requests\User\UpdateProfileInfoRequest;
 
 class AuthController extends Controller
+
 {
+
+    public function setCookie(Request $request) {
+        $minutes = 1;
+        $response = new Response('Hello World');
+    
+        $response->withCookie(cookie('name', 'jotti', $minutes));
+    return $response;
+
+      
+     }
+
+     public function getCookie(Request $request) {
+          
+        $value = $request->cookie('name');
+        echo $value;
+     }
     public function signup(Request $request)
     {        
         // $data = User::find(10);
@@ -59,6 +77,8 @@ class AuthController extends Controller
         // $jj = api_send_mail($mailInfo);
 
         // dd('zzzz asdasd', $jj);
+
+        
 
    
         try {
@@ -234,10 +254,15 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+       
+   
 
+      
         
       
         try {
+
+           
             // for login with both username and password
             // if ($request->exists('phone') && $request->filled('phone') && $request->filled('country_code')) {
             //     $credentials = request(['phone', 'password', 'country_code']);
@@ -248,6 +273,8 @@ class AuthController extends Controller
             if (!Auth::attempt($credentials)) {
                 return api_error('Invalid credentials.');
             }
+           
+          
             $user = $request->user();
     
             if (!$user->status) {
@@ -257,7 +284,8 @@ class AuthController extends Controller
             if ($user->status == 2) {
                 return api_error('Your Account is Blocked/Deleted');
             }
-
+  
+          
             foreach ($user->tokens as $token) {
                 $token->revoke();
             }
@@ -265,7 +293,8 @@ class AuthController extends Controller
             $user->device_token = request('device_token');
             $user->device_type = request('device_type');
             $user->save();
-
+          
+            
             $tokenObj = $user->createToken('user access token');
             
             $token = $tokenObj->token;
@@ -278,7 +307,8 @@ class AuthController extends Controller
             $token = $tokenObj->accessToken;
             $user->makeHidden('tokens');
 
-            $data = Arr::add($user->toArray(), 'token_detail', ['access_token' => $token, 'token_type' => 'Bearer',]);
+            $data = Arr::add($user->toArray(), 'token_detail', ['access_token' => $token, 'token_type' => 'Bearer']);
+            
 
             Artisan::call('schedule:run');
             // Artisan::call('schedule:work');
@@ -371,7 +401,7 @@ class AuthController extends Controller
                 $dataMain->first_name =  $request->first_name ? $request->first_name : $dataMain->first_name;
                 $dataMain->last_name = $request->last_name ?? $user->last_name;
                
-                $dataMain->username = $request->first_name . '' . $request->last_name;
+                $dataMain->username = $request->first_name . ' ' . $request->last_name;
                 $dataMain->phone = $request->phone_number ?? $user->phone_number;
                 $dataMain->country_code = $request->country_code ?? $user->country_code;
                 $dataMain->user_type = 'business';
@@ -382,7 +412,7 @@ class AuthController extends Controller
                 $data->user_id = auth()->user()->id;
                 $data->first_name = $request->first_name ?? $user->first_name;
                 $data->last_name = $request->last_name ?? $user->last_name;
-                $dataMain->name = $request->first_name . '' . $request->last_name;
+                $dataMain->name = $request->first_name . ' ' . $request->last_name;
                 $data->user_type = 'business';
                 $data->phone_number = $request->phone_number ?? $user->phone_number;
                 $data->email = $dataMain->email;
@@ -473,7 +503,7 @@ class AuthController extends Controller
                 $dataMain = User::whereId(auth()->user()->id)->first();
                 $dataMain->first_name =  $request->first_name ? $request->first_name : $dataMain->first_name;
                 $dataMain->last_name = $request->last_name ?? $user->last_name;
-                $dataMain->username = $request->first_name . '' . $request->last_name;
+                $dataMain->username = $request->first_name . ' ' . $request->last_name;
                 $dataMain->phone = $request->phone_number ?? $user->phone_number;
                 $dataMain->country_code = $request->country_code ?? $user->country_code;
                 $dataMain->user_type = 'artist';
@@ -484,7 +514,7 @@ class AuthController extends Controller
                 $data->user_id = auth()->user()->id;
                 $data->first_name = $request->first_name ?? $user->first_name;
                 $data->last_name = $request->last_name ?? $user->last_name;
-                $dataMain->name = $request->first_name . '' . $request->last_name;
+                $dataMain->name = $request->first_name . ' ' . $request->last_name;
                 $data->user_type = 'artist';
                 $data->phone_number = $request->phone_number ?? $user->phone_number;
                 $data->email = $dataMain->email;
@@ -618,7 +648,7 @@ class AuthController extends Controller
     public function editProfile(Request $request)
     { 
 
-    
+   // return $request->all();
         if (!auth('api')->check()) {
             return api_error('Message: Login required');
         }
@@ -629,7 +659,7 @@ class AuthController extends Controller
          
             $dataMain->first_name = $request->first_name ? $request->first_name : $dataMain->first_name;
             $dataMain->last_name = $request->last_name ? $request->last_name : $dataMain->last_name;
-            $dataMain->username = ($request->first_name ?  $request->first_name : $dataMain->first_name)  . '' . ($request->last_name ? $request->last_name : $dataMain->last_name);
+            $dataMain->username = ($request->first_name ?  $request->first_name : $dataMain->first_name)  . ' ' . ($request->last_name ? $request->last_name : $dataMain->last_name);
             $dataMain->phone = $request->phone_number ? $request->phone_number :  $dataMain->phone;
             $dataMain->country_code = $request->country_code ? $request->country_code : $dataMain->country_code ;
             $dataMain->gender = $request->gender ? $request->gender : $dataMain->gender;
@@ -670,6 +700,7 @@ class AuthController extends Controller
            
             $data->first_name = $request->first_name  ? $request->first_name : $data->first_name;;
             $data->last_name = $request->last_name ? $request->last_name : $data->last_name; 
+            $data->name = ($request->first_name ?  $request->first_name : $data->first_name)  . ' ' . ($request->last_name ? $request->last_name : $data->last_name);
             $data->phone_number = $request->phone_number  ? $request->phone_number :  $data->phone;;
             $data->country_code = $request->country_code ? $request->country_code : $data->country_code ;;
        

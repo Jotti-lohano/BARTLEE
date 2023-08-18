@@ -21,7 +21,7 @@ class NotificationController extends Controller
         $notifications = Notification::orderBy('created_at', 'DESC')->where('notifiable_id', auth('api')->user()->id)->where('read_at', null)->paginate(10);
         $success['notifications'] = $notifications;
         return $this->response->success(
-            NotificationResource::collection($notifications) );
+        NotificationResource::collection($notifications) );
        
     }
 

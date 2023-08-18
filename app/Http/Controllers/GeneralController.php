@@ -45,7 +45,7 @@ class GeneralController extends Controller
             $user =  ContactUs::where('id',$request->id)->first();
 
             return $this->response->success(
-              new DefaultResource($user)
+              new FeedBackResource($user)
           );
         }
 

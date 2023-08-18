@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api\Business;
 
 use App\Models\User;
+use App\Models\Skills;
 use App\Models\UserProfile;
 use App\Models\BusinessType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DefaultResource;
+use App\Http\Requests\Business\AddSkill;
 use App\Http\Controllers\MainApiController;
 use App\Http\Resources\ArtistListingResource;
 use App\Http\Resources\BusinessListingResource;
-use App\Models\Skills;
+
 
 class BusinessController extends Controller
 {
@@ -134,7 +136,7 @@ class BusinessController extends Controller
         }
     }
 
-    public function addSkill(Request $request)
+    public function addSkill(AddSkill $request)
     {
       $skill = new Skills();
       $skill->skill = $request->skill;

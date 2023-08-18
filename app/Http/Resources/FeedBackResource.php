@@ -20,7 +20,8 @@ class FeedBackResource extends JsonResource
             'last_name' => $this->lastname,
             'email' => $this->email,
             'subject' => $this->subject,
-            'created_at' =>  $this->when(isset($this->created_at), $this->created_at ? $this->created_at->format('d/m/Y') : '', ''),
+            'created_at' =>  $this->when(isset($this->created_at), $this->created_at ? $this->created_at->format('Y-m-d') : ''),
         ];
     }
 }
+// $this->created_at->format('Y-m-d')
