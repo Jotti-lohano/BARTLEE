@@ -20,7 +20,7 @@ class BusinessListingResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'email' => $this->when(isset($this->email), $this->email),            
-            'status' =>   $this->status == 1  ? 'Active' : 'In Active',
+            'status' =>   $this->status,
             'user_type' => $this->user_type,
             'business_type' => $this->user_business_detail ? BusinessType::where('id',$this->user_business_detail->business_type_id)->pluck('business_type')->first() : null,
             'created_at' =>  $this->when(isset($this->created_at), $this->created_at ? $this->created_at->format('d/m/Y') : '', ''),

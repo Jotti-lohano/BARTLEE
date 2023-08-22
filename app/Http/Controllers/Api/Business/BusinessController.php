@@ -44,6 +44,15 @@ class BusinessController extends Controller
         $q->whereDate('created_at', '>=', request('from'))->whereDate('created_at', '<=', request('to'));
       })
 
+
+          // ->when(request()->filled('to'), function($q) {
+          //   $q->whereDate('created_at', '<=', request('to'));
+          // })
+
+          ->when(request()->filled('status'), function($q) {
+            $q->where('status', '=', request('status'));
+          })
+
       ->when(request()->filled('search'), function($q) {
         $q->where(function($q) {
             $q->where('first_name', 'like', '%'.request("search").'%')
@@ -54,7 +63,7 @@ class BusinessController extends Controller
        ->paginate(request('entries'));
        return $this->response->success(
         ArtistListingResource::collection($artists) );
-       return $this->response->success(ArtistListingResource::collection($artists));
+    
    
      
 
@@ -65,6 +74,14 @@ class BusinessController extends Controller
 
           ->when(request()->filled('from'), function($q) {
             $q->whereDate('created_at', '>=', request('from'))->whereDate('created_at', '<=', request('to'));
+          })
+
+          // ->when(request()->filled('to'), function($q) {
+          //   $q->whereDate('created_at', '<=', request('to'));
+          // })
+
+          ->when(request()->filled('status'), function($q) {
+            $q->where('status', '=', request('status'));
           })
           ->when(request()->filled('search'), function($q) {
             $q->where(function($q) {

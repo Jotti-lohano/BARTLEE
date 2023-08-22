@@ -21,7 +21,7 @@ class ArtistListingResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'email' => $this->when(isset($this->email), $this->email),            
-            'status' =>   $this->status == 1  ? 'Active' : 'In Active',
+            'status' =>   $this->status ,
             'user_type' => $this->user_type,
             'user_artist' =>  UserArtist::where('user_profile_id',$this->id)->first(),
             'Profession'=> new ProfessionResource(UserArtist::where('user_profile_id',$this->id)->first()),
