@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DefaultResource;
 use App\Http\Requests\Business\AddSkill;
 use App\Http\Controllers\MainApiController;
+use App\Http\Requests\Business\AddBusiness;
 use App\Http\Resources\ArtistListingResource;
 use App\Http\Resources\BusinessListingResource;
 
@@ -139,7 +140,7 @@ class BusinessController extends Controller
       
     }
 
-    public function addBusiness(Request $request)
+    public function addBusiness(AddBusiness $request)
     {
 
       $bussiness = new BusinessType();
